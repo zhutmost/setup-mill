@@ -1,4 +1,4 @@
-name: 'Set up Mill'
+name: 'Setup Mill'
 description: 'Setup a Mill environment for Scala projects.'
 author: 'Haozhe Zhu'
 inputs:
