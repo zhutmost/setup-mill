@@ -1,0 +1,29 @@
+name: "CI"
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: ./
+      name: "Set up Mill"
+      with:
+        mill-version: 0.11.7
+    - name: "Run Mill"
+      run: mill version
+  cacheTest:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: ./
+      name: "Set up Mill"
+      with:
+        mill-version: 0.11.7
+    - name: "Run Mill"
+      run: mill version
