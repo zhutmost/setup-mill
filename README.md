@@ -1,21 +1,31 @@
-MIT License
+# GitHub Action to Setup Mill for Scala Projects
 
-Copyright (c) 2024 Haozhe Zhu
+![Build & Test](https://github.com/zhutmost/setup-mill/actions/workflows/ci.yml/badge.svg)
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Use this action to make [mill](http://www.lihaoyi.com/mill/) available in a job.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+## Usage
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+```yaml
+- uses: zhutmost/setup-mill@master
+  with:
+    mill-version: 0.11.7 # Specify the default Mill version
+- name: Compile
+  run: mill project.compile
+- name: Test
+  run: mill project.test
+```
+
+### Difference from the existing `setup-mill` action
+
+This repository was created to fix [an issue](https://github.com/jodersky/setup-mill/issues/7) in [jodersky/setup-mill](https://github.com/jodersky/setup-mill), where the action did not support specifying the Mill version using `.mill-version`.
+
+In this repository, this action will download the Mill wrapper script (rather than the binary) and make it available in the PATH.
+It will download the binary with proper version when needed.
+That is to say, if you specify a Mill version via `REPO/.mill-version`/`REPO/.config/mill-version`, the action will download the specified version.
+
+## Acknowledgement
+
+This repository is standing on the shoulder of giants.
+
+This repository is forked from [jodersky/setup-mill](https://github.com/jodersky/setup-mill). Thanks for the original author's work.
