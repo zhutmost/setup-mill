@@ -5,7 +5,7 @@ inputs:
   mill-version:
     description: 'The default Mill version to be installed if no version is specified'
     required: false
-    default: '0.11.7'
+    default: '0.12.3'
 runs:
   using: 'node20'
   main: 'dist/index.js'
