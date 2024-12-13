@@ -28289,19 +28289,16 @@ const exec = __nccwpck_require__(8298);
 const tc = __nccwpck_require__(6496);
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
-        const workingDirectoryInput = core.getInput('working-directory');
-        const workingDirectory = workingDirectoryInput.length === 0 ? '.' : workingDirectoryInput;
-        const millPath = path.join(workingDirectory, '.mill-bin');
-        const millVersion = core.getInput('mill-version');
+        const millBinPath = path.join(process.cwd(), 'mill_bin');
         try {
-            core.info('Installing mill...');
+            core.info('Installing mill ...');
+            const millVersion = core.getInput('mill-version');
             const millDownloadPath = yield tc.downloadTool(`https://github.com/lihaoyi/mill/releases/download/${millVersion}/${millVersion}`);
-            yield io.mkdirP(millPath);
-            yield io.cp(millDownloadPath, `${millPath}/mill`, { force: true });
-            fs.chmodSync(`${millPath}/mill`, '0755');
-            core.info('Add mill to PATH ...');
-            core.addPath(millPath);
-            yield exec.exec('echo', ['$PATH']);
+            yield io.mkdirP(millBinPath);
+            yield io.cp(millDownloadPath, `${millBinPath}/mill`, { force: true });
+            fs.chmodSync(`${millBinPath}/mill`, '0755');
+            core.info(`Add mill to PATH ... ${millBinPath}`);
+            core.addPath(millBinPath);
             yield exec.exec('mill', ['version']);
         }
         catch (error) {

@@ -9,7 +9,7 @@ async function main(): Promise<void> {
   const millBinPath = path.join(process.cwd(), 'mill_bin')
 
   try {
-    core.info('Installing mill...')
+    core.info('Installing mill ...')
 
     const millVersion: string = core.getInput('mill-version')
     const millDownloadPath: string = await tc.downloadTool(
