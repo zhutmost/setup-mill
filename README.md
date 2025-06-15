@@ -9,7 +9,7 @@ Use this action to make [mill](http://www.lihaoyi.com/mill/) available in a job.
 ```yaml
 - uses: zhutmost/setup-mill@main
   with:
-    mill-version: 0.12.3 # Specify the default Mill version
+    mill-version: 0.12.14 # Specify the default Mill version
 - name: Compile
   run: mill project.compile
 - name: Test
