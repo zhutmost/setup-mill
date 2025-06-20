@@ -44,7 +44,7 @@ jobs:
 
       - name: Write Mill config
         if: ${{ matrix.extra_command }}
-        run: matrix.extra_command
+        run: ${{ matrix.extra_command }}
 
       - name: Get Mill version
         id: version-check
