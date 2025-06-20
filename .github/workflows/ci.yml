@@ -28,11 +28,8 @@ jobs:
             extra_command: 'echo "//| mill-version: 1.0.0-RC1" > build.mill'
             expected_version: "1.0.0-RC1"
 
-          - name: legacy-0.12.3
-            version: "0.12.3"
-
-          - name: legacy-0.12.11
-            version: "0.12.11"
+          - name: legacy-0.11.13
+            version: "0.11.13"
 
     name: "Test (${{ matrix.name }})"
 
