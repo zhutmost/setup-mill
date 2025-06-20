@@ -1,4 +1,4 @@
-name: "CI"
+name: "Test"
 
 on:
   pull_request:
@@ -7,33 +7,63 @@ on:
       - main
 
 jobs:
-  test-default:
+  test:
     runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: ./
-      name: "Set up Mill"
-    - name: "Run Mill"
-      run: mill version
+    strategy:
+      matrix:
+        include:
+          - name: default
+            expected_version: "0.12.14"
 
-  test-legacy-version:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: ./
-      name: "Set up Mill"
-      with:
-        mill-version: 0.12.3
-    - name: "Run Mill"
-      run: mill version
+          - name: default-with-mill-version-file
+            version: "1.0.0-RC2"
+            extra_command: 'echo "1.0.0-RC2" > .mill-version'
 
-  test-alpha-version:
-    runs-on: ubuntu-latest
+          - name: default-with-build-mill-front-matter
+            version: "1.0.0-RC2"
+            extra_command: 'echo "//| mill-version: 1.0.0-RC2" > build.mill'
+
+          - name: specify-with-build-mill-front-matter
+            version: "1.0.0-RC2"
+            extra_command: 'echo "//| mill-version: 1.0.0-RC1" > build.mill'
+            expected_version: "1.0.0-RC1"
+
+          - name: legacy-0.12.3
+            version: "0.12.3"
+
+          - name: legacy-0.12.11
+            version: "0.12.11"
+
+    name: "Test (${{ matrix.name }})"
+
     steps:
-    - uses: actions/checkout@v4
-    - uses: ./
-      name: "Set up Mill"
-      with:
-        mill-version: 1.0.0-RC2
-    - name: "Run Mill"
-      run: mill version
+      - uses: actions/checkout@v4
+
+      - name: Set up Mill
+        uses: ./
+        with:
+          ${{ matrix.version && 'mill-version' || '' }}: ${{ matrix.version }}
+        id: mill-setup
+
+      - name: Write Mill config
+        if: ${{ matrix.extra_command }}
+        run: matrix.extra_command
+
+      - name: Get Mill version
+        id: version-check
+        run: |
+          mill_version=$(mill version | tail -1)
+          echo "Detected version: $mill_version"
+          echo "EXPECTED_VERSION=${{ matrix.expected_version || matrix.version }}" >> $GITHUB_ENV
+          echo "DETECTED_VERSION=$mill_version" >> $GITHUB_ENV
+
+          echo "mill_version=$mill_version" >> $GITHUB_OUTPUT
+
+      - name: Verify Mill version
+        run: |
+          if [ "$DETECTED_VERSION" != "$EXPECTED_VERSION" ]; then
+            echo "❌ Version mismatch! Expected: $EXPECTED_VERSION, Got: $DETECTED_VERSION"
+            exit 1
+          else
+            echo "✅ Version verified: $DETECTED_VERSION"
+          fi
