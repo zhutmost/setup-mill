@@ -28232,12 +28232,11 @@ function main() {
         try {
             core.info('Installing mill ...');
             const millVersion = core.getInput('mill-version');
-            const millUrl = yield downloadWithFallback([
+            const millDownloadPath = yield downloadWithFallback([
                 `https://repo1.maven.org/maven2/com/lihaoyi/mill-dist/${millVersion}/mill-dist-${millVersion}-mill.sh`, // for 0.12.13 and later
                 `https://repo1.maven.org/maven2/com/lihaoyi/mill-dist/${millVersion}/mill`, // for 0.12.6 to 0.12.11
                 `https://github.com/lihaoyi/mill/releases/download/${millVersion}/${millVersion}`, // for 0.12.5 and earlier
             ]);
-            const millDownloadPath = yield tc.downloadTool(millUrl);
             yield io.mkdirP(millBinPath);
             yield io.cp(millDownloadPath, `${millBinPath}/mill`, { force: true });
             fs.chmodSync(`${millBinPath}/mill`, '0755');
