@@ -39,7 +39,7 @@ jobs:
       - name: Set up Mill
         uses: ./
         with:
-          ${{ matrix.version && 'mill-version' || '' }}: ${{ matrix.version }}
+          ${{ matrix.version && 'mill-version' || 'dummy-param' }}: ${{ matrix.version }}
         id: mill-setup
 
       - name: Write Mill config
