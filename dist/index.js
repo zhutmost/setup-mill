@@ -28228,20 +28228,21 @@ function downloadWithFallback(urls) {
 }
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
-        const millBinPath = path.join(process.cwd(), 'mill_bin');
+        const installPath = path.join(process.cwd(), '.__install__/mill');
         try {
-            core.info('Installing mill ...');
+            core.info('Installing ...');
             const millVersion = core.getInput('mill-version');
-            const millDownloadPath = yield downloadWithFallback([
+            const downloadPath = yield downloadWithFallback([
                 `https://repo1.maven.org/maven2/com/lihaoyi/mill-dist/${millVersion}/mill-dist-${millVersion}-mill.sh`, // for 0.12.13 and later
                 `https://repo1.maven.org/maven2/com/lihaoyi/mill-dist/${millVersion}/mill`, // for 0.12.6 to 0.12.11
                 `https://github.com/lihaoyi/mill/releases/download/${millVersion}/${millVersion}`, // for 0.12.5 and earlier
             ]);
-            yield io.mkdirP(millBinPath);
-            yield io.cp(millDownloadPath, `${millBinPath}/mill`, { force: true });
-            fs.chmodSync(`${millBinPath}/mill`, '0755');
-            core.info(`Add mill to PATH ... ${millBinPath}`);
-            core.addPath(millBinPath);
+            const targetBinPath = path.join(installPath, 'bin');
+            yield io.mkdirP(targetBinPath);
+            yield io.cp(downloadPath, `${targetBinPath}/mill`, { force: true });
+            fs.chmodSync(`${targetBinPath}/mill`, '0755');
+            core.info(`Update PATH ... ${targetBinPath}`);
+            core.addPath(targetBinPath);
             yield exec.exec('mill', ['version']);
         }
         catch (error) {

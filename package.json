@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "main": "./dist/index.js",
   "scripts": {
-    "pack": "ncc build ./src/index.ts --out dist --license licenses.txt",
-    "build": "ncc build ./src/index.ts --out dist --source-map"
+    "pack": "ncc build ./src/index.ts --out dist --license licenses.txt"
   },
   "dependencies": {
     "@actions/core": "^1.11.1",

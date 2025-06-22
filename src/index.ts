@@ -22,24 +22,25 @@ async function downloadWithFallback(urls: string[]): Promise<string> {
 }
 
 async function main(): Promise<void> {
-  const millBinPath = path.join(process.cwd(), 'mill_bin')
+  const installPath = path.join(process.cwd(), '.__install__/mill')
 
   try {
-    core.info('Installing mill ...')
+    core.info('Installing ...')
 
     const millVersion: string = core.getInput('mill-version')
 
-    const millDownloadPath: string = await downloadWithFallback([
+    const downloadPath: string = await downloadWithFallback([
       `https://repo1.maven.org/maven2/com/lihaoyi/mill-dist/${millVersion}/mill-dist-${millVersion}-mill.sh`, // for 0.12.13 and later
       `https://repo1.maven.org/maven2/com/lihaoyi/mill-dist/${millVersion}/mill`, // for 0.12.6 to 0.12.11
       `https://github.com/lihaoyi/mill/releases/download/${millVersion}/${millVersion}`, // for 0.12.5 and earlier
     ])
-    await io.mkdirP(millBinPath)
-    await io.cp(millDownloadPath, `${millBinPath}/mill`, { force: true })
-    fs.chmodSync(`${millBinPath}/mill`, '0755')
+    const targetBinPath = path.join(installPath, 'bin')
+    await io.mkdirP(targetBinPath)
+    await io.cp(downloadPath, `${targetBinPath}/mill`, { force: true })
+    fs.chmodSync(`${targetBinPath}/mill`, '0755')
 
-    core.info(`Add mill to PATH ... ${millBinPath}`)
-    core.addPath(millBinPath)
+    core.info(`Update PATH ... ${targetBinPath}`)
+    core.addPath(targetBinPath)
 
     await exec.exec('mill', ['version'])
   } catch (error: unknown) {
