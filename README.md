@@ -1,5 +1,8 @@
 # GitHub Action to Setup Mill for Scala Projects
 
+> [!NOTE]
+> For new projects, follow [Mill's recommended setup](https://mill-build.org/mill/cli/installation-ide.html#bootstrap-scripts): commit the official `./mill` bootstrap script (and `mill.bat` for Windows) to your repository, then run `./mill` directly in CI. The script selects the project's Mill version and downloads it when needed. Update the script with `./mill updateMillScripts <version>`.
+
 ![Build & Test](https://github.com/zhutmost/setup-mill/actions/workflows/ci.yml/badge.svg)
 
 Use this action to make [mill](http://www.lihaoyi.com/mill/) available in a job.
