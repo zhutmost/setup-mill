@@ -13,11 +13,11 @@ jobs:
       matrix:
         include:
           - name: default
-            expected_version: "0.12.14"
+            expected_version: "1.1.9"
 
           - name: default-with-mill-version-file
-            version: "1.0.0-RC2"
-            extra_command: 'echo "1.0.0-RC2" > .mill-version'
+            version: "1.1.9"
+            extra_command: 'echo "1.1.9" > .mill-version'
 
           - name: default-with-build-mill-front-matter
             version: "1.0.0-RC2"
